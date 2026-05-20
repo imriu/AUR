@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>AURA Gold ZATCA Pro</title>
+  <style>
+    :root{
+      --gold:#c9a84c; --gold2:#a07830; --gold3:#f5e6c0; --gold4:#7a5c1e;
+      --dark:#0a0a0a; --ink:#1a1201; --muted:#7b6b4a; --line:#e5d8b0;
+      --bg:#f8f5ee; --red:#b91c1c; --green:#155e3e; --blue:#1e3a8a; --radius:14px;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;padding:0}
+    body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);font-size:14px}
+    .topbar{background:var(--dark);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:20;box-shadow:0 2px 16px rgba(0,0,0,.35)}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .logobox{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#f5e6c0,#c9a84c,#7a5c1e);display:grid;place-items:center;font-size:18px;font-weight:900;color:#111;background-size:cover;background-position:center;overflow:hidden;flex-shrink:0}
+    .btxt{min-width:0}
+    .bname{color:#fff;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bsub{color:var(--gold);font-size:10px;letter-spacing:1px;text-transform:uppercase}
+    #langSel{background:#222;color:#fff;border:1px solid #444;border-radius:8px;padding:6px 8px;font-size:13px;min-height:36px;width:100px}
+    .app{max-width:520px;margin:0 auto;padding:10px 10px 100px}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 20px rgba(0,0,0,.07);margin-bottom:11px;overflow:hidden}
+    .ph{background:linear-gradient(135deg,#0a0a0a,#251e0a);padding:12px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+    .ph-ttl{color:var(--gold);font-size:13px;font-weight:800;flex:1}
+    .ph-bdg{background:var(--gold);color:var(--dark);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:900}
+    .ph-arr{color:#888;font-size:12px;transition:.2s}
+    .panel.closed .ph-arr{transform:rotate(-90deg)}
+    .panel.closed .pb{display:none}
+    .pb{padding:14px}
+    .g1{display:grid;gap:10px}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .lbl{display:block;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;margin-bottom:5px}
+    input,select,textarea,button{font-family:inherit}
+    input,select,textarea{width:100%;min-height:46px;border-radius:11px;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:10px 12px;outline:none;font-size:15px}
+    input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+    textarea{min-height:68px;resize:vertical}
+    input[type=file]{min-height:40px;padding:8px}
+    .chk{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#fff;font-size:13px;font-weight:700;cursor:pointer}
+    .chk input{width:20px;height:20px;min-height:20px;accent-color:var(--gold)}
+    button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;cursor:pointer;color:#fff;background:var(--green);font-size:13px;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%}
+    button.gold{background:linear-gradient(135deg,var(--gold),var(--gold4))}
+    button.dk{background:#333}
+    button.lt{background:#ece8de;color:var(--ink)}
+    button.rd{background:var(--red)}
+    button.blue{background:var(--blue)}
+    button.sm{padding:8px 10px;font-size:12px;min-height:36px}
+    button.au{width:auto}
+    .icard{border:1.5px solid var(--line);border-radius:13px;background:#fffcf4;padding:12px;margin-bottom:10px}
+    .ihead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px}
+    .inum{background:linear-gradient(135deg,var(--gold),var(--gold4));color:#fff;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:900}
+    .srow{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:9px;font-size:12px;font-weight:800;margin-top:6px;gap:8px}
+    .srow.n{background:#faf5e8;border:1px solid #e5d8b0;color:#6b4c10}
+    .srow.t{background:linear-gradient(135deg,#0a0a0a,#251e0a);color:var(--gold3)}
+    .trow{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;border-radius:11px;background:#fff;border:1px solid var(--line);font-size:14px;font-weight:800;margin-bottom:7px}
+    .trow.grand{background:linear-gradient(135deg,#0a0a0a,#251e0a);border:none;color:var(--gold3);font-size:17px}
+    .trow.red{color:var(--red)}
+    .trow.grn{color:var(--green)}
+    .nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,10,10,.97);border-top:1px solid #2a2a2a;padding:8px 12px;padding-bottom:calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .nb{background:transparent;border:1px solid #333;border-radius:11px;min-height:52px;color:#fff;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;-webkit-appearance:none;appearance:none}
+    .nb.gold{background:linear-gradient(135deg,var(--gold),var(--gold4));border-color:transparent}
+    .nb.blue{background:var(--blue);border-color:transparent}
+    .ni{font-size:18px;line-height:1}
+    .hitem{border:1px solid var(--line);border-radius:11px;padding:11px;background:#fff;margin-bottom:8px}
+    .hidden{display:none !important}
+    .err{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px 12px;color:var(--red);font-size:13px;font-weight:700;margin-top:8px}
+    #toast{position:fixed;bottom:calc(82px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#1a1a1a;color:var(--gold3);padding:10px 18px;border-radius:11px;font-size:13px;font-weight:800;z-index:9999;border:1px solid var(--gold4);opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+    #invOut{background:#fff;width:100%;display:block;font-family:Georgia,serif;color:#1a1201;min-height:120px}
+    .istrip{height:5px;background:linear-gradient(90deg,#7a5c1e,#c9a84c 30%,#f5e6c0 50%,#c9a84c 70%,#7a5c1e)}
+    .ibody{padding:7mm 9mm}
+    .ihdr{display:flex;justify-content:space-between;align-items:flex-start;gap:6mm;padding-bottom:5mm;border-bottom:1.5px solid #c9a84c;margin-bottom:4mm}
+    .isbl{display:flex;align-items:center;gap:3mm}
+    .ilogo,.ilogoph{width:64px;height:64px;border-radius:10px;border:none;flex-shrink:0;background:#fff}
+    .ilogo{object-fit:cover;display:block;margin:0 auto}
+    .ilogoph{background:linear-gradient(135deg,#f5e6c0,#c9a84c,#7a5c1e);display:grid;place-items:center;font-size:24px;font-weight:900;color:#0a0a0a;margin:0 auto}
+    .isname{font-size:19px;font-weight:900;color:#0a0a0a}
+    .isinfo{font-size:9px;color:#5a4a2a;margin-top:4px;line-height:1.9}
+    .itblock{text-align:right}
+    .ibadge{display:inline-block;background:linear-gradient(135deg,#0a0a0a,#251e0a);color:#f5e6c0;font-size:11px;font-weight:900;padding:6px 12px;border-radius:7px;letter-spacing:.4px;border:1px solid #c9a84c;margin-bottom:5px}
+    .imeta{font-size:9px;color:#5a4a2a;line-height:2;text-align:right}
+    .imeta strong{color:#1a1201}
+    .idiv{display:flex;align-items:center;gap:3mm;margin:3mm 0}
+    .idivl{flex:1;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent)}
+    .icbar{background:linear-gradient(135deg,#faf6eb,#fdf8f0);border:1px solid #e5d8b0;border-radius:9px;padding:3mm 4mm;margin-bottom:4mm;display:flex;flex-wrap:wrap;gap:3mm;justify-content:space-between}
+    .icf .icl{font-size:8px;color:#a07830;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+    .icf .icv{font-size:11px;font-weight:800;color:#1a1201;margin-top:2px}
+    .itable{width:100%;border-collapse:collapse;margin-bottom:4mm;table-layout:fixed;font-size:9px}
+    .itable colgroup col:nth-child(1){width:30%}
+    .itable colgroup col:nth-child(2){width:13%}
+    .itable colgroup col:nth-child(3){width:15%}
+    .itable colgroup col:nth-child(4){width:14%}
+    .itable colgroup col:nth-child(5){width:12%}
+    .itable colgroup col:nth-child(6){width:16%}
+    .itable thead tr{background:linear-gradient(135deg,#0a0a0a,#251e0a)}
+    .itable thead th{color:#f5e6c0;font-size:8px;font-weight:800;padding:6px 5px;white-space:nowrap;text-align:center}
+    .itable thead th:first-child{text-align:left;padding-left:7px}
+    .itable thead th:last-child{text-align:right;padding-right:7px}
+    .itable tbody tr{border-bottom:1px solid #f0e8d0}
+    .itable tbody tr:nth-child(even){background:#fffcf4}
+    .itable tbody td{padding:6px 5px;color:#1a1201;text-align:center;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .itable tbody td:first-child{text-align:left;padding-left:7px;white-space:normal;word-break:break-word}
+    .itable tbody td:last-child{text-align:right;font-weight:800;padding-right:7px}
+    .ibadge2{background:linear-gradient(135deg,#c9a84c,#7a5c1e);color:#fff;border-radius:4px;padding:1px 5px;font-size:8px;font-weight:900;margin-right:3px}
+    .ibot{display:flex;align-items:flex-start;justify-content:space-between;gap:5mm;margin-bottom:4mm}
+    .itots{flex:1}
+    .itots table{width:100%;border-collapse:collapse}
+    .itots td{padding:5px 7px;font-size:9px;color:#1a1201;border-bottom:1px solid #f0e8d0}
+    .itots td:last-child{text-align:right;font-weight:800}
+    .itots tr:last-child td{border:none}
+    .itots .igr td{background:linear-gradient(135deg,#0a0a0a,#251e0a);color:#f5e6c0;font-size:12px;font-weight:900;padding:7px 9px;border:none}
+    .itots .igr td:first-child{border-radius:7px 0 0 7px}
+    .itots .igr td:last-child{border-radius:0 7px 7px 0;text-align:right}
+    .itots .ipr td{color:#155e3e;font-weight:900}
+    .itots .ibl td{color:#b91c1c;font-weight:900}
+    .itots .ivt td{color:#6b4c10}
+    .iqrb{flex-shrink:0;width:120px;text-align:center}
+    .iqrb img{border:none;border-radius:6px;background:#fff;display:block;width:110px;height:110px}
+    .iftr{border-top:1.5px solid #c9a84c;padding-top:4mm;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:4mm}
+    .inotes{font-size:9px;color:#5a4a2a;max-width:60%;line-height:1.7}
+    .isig{text-align:right}
+    .isigline{width:100px;border-top:1px solid #c9a84c;margin-bottom:4px;margin-left:auto}
+    .isigtxt{font-size:9px;color:#5a4a2a;font-weight:700}
+    .social-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:4px;font-size:8px;color:#8a6a20;font-weight:700}
+    .soc{display:inline-flex;align-items:center;gap:4px}
+    .soc-ico{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;color:#111}
+    .disclaimer-bar{background:#faf5e8;border:1px solid #e5d8b0;border-radius:7px;padding:3mm 4mm;margin-top:3mm;font-size:8px;color:#5a4a2a;line-height:1.8;text-align:center}
+    .inv-rtl{direction:rtl}
+    .inv-rtl .ihdr{flex-direction:row-reverse}
+    .inv-rtl .itblock{text-align:left}
+    .inv-rtl .imeta{text-align:left}
+    .inv-rtl .icbar{flex-direction:row-reverse}
+    .inv-rtl .itable thead th:first-child{text-align:right}
+    .inv-rtl .itable thead th:last-child{text-align:left}
+    .inv-rtl .itable tbody td:first-child{text-align:right}
+    .inv-rtl .itable tbody td:last-child{text-align:left}
+    .inv-rtl .ibadge2{margin-right:0;margin-left:3px}
+    .inv-rtl .itots td:last-child{text-align:left}
+    .inv-rtl .itots .igr td:first-child{border-radius:0 7px 7px 0}
+    .inv-rtl .itots .igr td:last-child{border-radius:7px 0 0 7px;text-align:left}
+    .inv-rtl .ibot{flex-direction:row-reverse}
+    .inv-rtl .iftr{flex-direction:row-reverse}
+    .inv-rtl .isig{text-align:left}
+    .inv-rtl .isigline{margin-left:0;margin-right:auto}
+    html[dir="rtl"] .g2,html[dir="rtl"] .ihead,html[dir="rtl"] .srow,html[dir="rtl"] .trow,html[dir="rtl"] .ph,html[dir="rtl"] .brand{direction:rtl}
+    html[dir="rtl"] .chk{flex-direction:row-reverse}
+    html[dir="rtl"] .nav{direction:rtl}
+    #printArea{display:none;position:static}
+    @page{margin:0;size:auto}@media print{
+      html,body{background:#fff !important;margin:0 !important;padding:0 !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+      body>*:not(#printArea){display:none !important}
+      #printArea{display:block !important}
+    }
+    @media (max-width:420px){
+      .g2{grid-template-columns:1fr}
+      .ibot,.ihdr,.iftr{display:block}
+      .iqrb{margin-top:10px}
+      .inotes{max-width:none;margin-bottom:10px}
+    }
+    #qrLibStatus{display:none;background:#fef9e7;border:1px solid #f0c040;border-radius:9px;padding:8px 12px;font-size:12px;color:#7a5c1e;font-weight:700;margin-bottom:8px;text-align:center}
+    .lock-banner{background:linear-gradient(135deg,#0a0a0a,#251e0a);border:1.5px solid var(--gold);border-radius:11px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .lock-banner-txt{color:var(--gold3);font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px}
+    .lock-banner-ico{font-size:18px}
+    .locked-overlay{pointer-events:none;opacity:0.45;user-select:none}
+    .unlock-btn{background:linear-gradient(135deg,var(--gold),var(--gold4));color:#111;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:900;cursor:pointer;min-height:36px;width:auto;display:inline-flex;align-items:center;gap:5px;pointer-events:all}
+    .lock-btn{background:#333;color:var(--gold3);border:1px solid var(--gold4);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:900;cursor:pointer;min-height:36px;width:auto;display:inline-flex;align-items:center;gap:5px}
+    /* ── LICENSE GATE ── */
+    #licenseGate{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#0a0a0a,#251e0a);display:flex;align-items:center;justify-content:center;padding:20px}
+    .lg-box{background:#fff;border-radius:18px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+    .lg-logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,#f5e6c0,#c9a84c,#7a5c1e);display:grid;place-items:center;font-size:26px;font-weight:900;color:#111;margin:0 auto 14px}
+    .lg-title{font-size:20px;font-weight:900;color:#1a1201;margin-bottom:4px}
+    .lg-sub{font-size:12px;color:#7b6b4a;margin-bottom:20px}
+    .lg-input{width:100%;border:2px solid #e5d8b0;border-radius:11px;padding:12px 14px;font-size:16px;text-align:center;letter-spacing:3px;outline:none;margin-bottom:12px;color:#1a1201}
+    .lg-input:focus{border-color:#c9a84c}
+    .lg-btn{width:100%;background:linear-gradient(135deg,#c9a84c,#7a5c1e);color:#fff;border:none;border-radius:11px;padding:14px;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:10px}
+    .lg-err{color:#b91c1c;font-size:13px;font-weight:700;min-height:20px;margin-bottom:6px}
+    .lg-exp{font-size:11px;color:#7b6b4a;margin-top:8px}
+    #expiredScreen{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#0a0a0a,#251e0a);display:none;align-items:center;justify-content:center;padding:20px}
+    .exp-box{background:#fff;border-radius:18px;padding:32px 24px;max-width:360px;width:100%;text-align:center}
+    .exp-icon{font-size:48px;margin-bottom:12px}
+    .exp-title{font-size:22px;font-weight:900;color:#b91c1c;margin-bottom:8px}
+    .exp-msg{font-size:13px;color:#7b6b4a;line-height:1.7}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logobox" id="logoBox">A</div>
+      <div class="btxt">
+        <div class="bname" id="appTitle">AURA Gold Shop</div>
+        <div class="bsub" id="appSub">Simplified Tax Invoice</div>
+      </div>
+    </div>
+    <select id="langSel">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+    </select>
+  </div>
+
+  <div class="app">
+    <div id="qrLibStatus">⚠️ QR library loading... Please wait or check internet connection.</div>
+
+    <div class="panel" id="pShop">
+      <div class="ph" onclick="togglePanel('pShop')"><span class="ph-ttl" data-k="shop">Shop Info</span><span class="ph-arr">▾</span></div>
+      <div class="pb g1">
+        <div id="shopLockBanner" class="lock-banner" style="display:none">
+          <div class="lock-banner-txt"><span class="lock-banner-ico">🔒</span><span>Shop info is locked. Only admin can edit.</span></div>
+          <button class="unlock-btn" onclick="unlockShop()">🔑 Unlock</button>
+        </div>
+        <div id="shopFields">
+          <div class="g1">
+            <div><span class="lbl" data-k="shopName">Shop Name</span><input id="shopName" value="AURA Gold Shop" oninput="saveSettings();renderInvoice()" /></div>
+            <div class="g2">
+              <div><span class="lbl" data-k="vatNo">VAT No.</span><input id="shopVat" oninput="saveSettings();renderInvoice()" /></div>
+              <div><span class="lbl" data-k="phone">Phone</span><input id="shopPhone" type="tel" oninput="saveSettings();renderInvoice()" /></div>
+            </div>
+            <div><span class="lbl" data-k="address">Address</span><textarea id="shopAddr" rows="2" oninput="saveSettings();renderInvoice()"></textarea></div>
+            <div class="g2">
+              <div><span class="lbl">CR No. / السجل التجاري</span><input id="shopCr" placeholder="CR No." oninput="saveSettings();renderInvoice()" /></div>
+              <div><span class="lbl">رخصة المعادن</span><input id="shopMetalLic" placeholder="رخصة المعادن" oninput="saveSettings();renderInvoice()" /></div>
+            </div>
+            <div>
+              <span class="lbl" data-k="lSocial">Social Media</span>
+              <div class="g2">
+                <input id="shopInsta" placeholder="Instagram" oninput="saveSettings();renderInvoice()" />
+                <input id="shopTiktok" placeholder="TikTok" oninput="saveSettings();renderInvoice()" />
+              </div>
+              <div style="height:10px"></div>
+              <input id="shopSnap" placeholder="Snapchat" oninput="saveSettings();renderInvoice()" />
+            </div>
+            <div>
+              <span class="lbl">تنبيه / Disclaimer</span>
+              <textarea id="shopDisclaimer" rows="3" oninput="saveSettings();renderInvoice()">وزن الحجر لا يتجاوز %5 من وزنه والبضاعه المباعه لا ترد ولاتستبدل بعد خروجها من المحل الا بقصد البيع</textarea>
+            </div>
+            <div>
+              <span class="lbl" data-k="shopLogo">Logo</span>
+              <input id="logoInput" type="file" accept="image/*" onchange="onLogo(this)" />
+              <button class="lt sm au" style="margin-top:6px" onclick="removeLogo()" data-k="removeLogo">Remove Logo</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:4px">
+              <button class="lock-btn" onclick="lockShop()">🔒 Lock Shop Info</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="pCust">
+      <div class="ph" onclick="togglePanel('pCust')"><span class="ph-ttl" data-k="custInv">Customer & Invoice</span><span class="ph-arr">▾</span></div>
+      <div class="pb g1">
+        <div class="g2">
+          <div><span class="lbl" data-k="lInvNo">Invoice No.</span><input id="invNo" readonly /></div>
+          <div><span class="lbl" data-k="lDate">Date</span><input id="invDate" type="datetime-local" oninput="renderInvoice()" /></div>
+        </div>
+        <div class="g2">
+          <div><span class="lbl" data-k="lCustName">Customer</span><input id="custName" oninput="renderInvoice()" /></div>
+          <div><span class="lbl" data-k="lCustPhone">Phone</span><input id="custPhone" type="tel" oninput="renderInvoice()" /></div>
+        </div>
+        <div class="g2">
+          <div><span class="lbl" data-k="lVatRate">VAT %</span><input id="vatRate" type="number" min="0" step="0.01" value="15" oninput="calc()" /></div>
+          <div><span class="lbl" data-k="lPaid">Paid (SAR)</span><input id="paidAmt" type="number" min="0" step="0.01" value="0" oninput="calc()" /></div>
+        </div>
+        <div class="g2">
+          <div>
+            <span class="lbl" data-k="lPayType">Payment</span>
+            <select id="payType" onchange="renderInvoice()">
+              <option value="Cash">Cash</option>
+              <option value="Card">Card</option>
+              <option value="Transfer">Bank Transfer</option>
+              <option value="Mixed">Mixed</option>
+              <option value="Credit">Credit</option>
+            </select>
+          </div>
+          <div><span class="lbl" data-k="lExp">Expense (SAR)</span><input id="expAmt" type="number" min="0" step="0.01" value="0" oninput="calc()" /></div>
+        </div>
+        <div><span class="lbl" data-k="lNotes">Notes</span><textarea id="notes" rows="2" oninput="renderInvoice()"></textarea></div>
+        <label class="chk"><input id="showQr" type="checkbox" checked onchange="renderInvoice()" /><span data-k="lShowQr">Show QR on Invoice</span></label>
+        <div id="formErr" class="err"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="pItems">
+      <div class="ph" onclick="togglePanel('pItems')"><span class="ph-ttl" data-k="lItems">Gold Items</span><span class="ph-bdg" id="itemCnt">0</span><span class="ph-arr">▾</span></div>
+      <div class="pb">
+        <div id="itemsHost"></div>
+        <div class="g2">
+          <button class="gold" onclick="addItem()" data-k="lAddItem">＋ Add Item</button>
+          <button class="lt" onclick="duplicateLastItem()" data-k="lDup">⧉ Duplicate</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="pTotals">
+      <div class="ph" onclick="togglePanel('pTotals')"><span class="ph-ttl" data-k="lTotals">Totals</span><span class="ph-arr">▾</span></div>
+      <div class="pb">
+        <div class="trow"><span data-k="lSub">Subtotal</span><strong id="dSub">SAR 0.00</strong></div>
+        <div class="trow"><span data-k="lTax">Taxable Amount</span><strong id="dTax">SAR 0.00</strong></div>
+        <div class="trow"><span data-k="lVatAmt">VAT Amount</span><strong id="dVat">SAR 0.00</strong></div>
+        <div class="trow grand"><span data-k="lGrand">GRAND TOTAL</span><strong id="dGrand">SAR 0.00</strong></div>
+        <div class="trow grn"><span data-k="lPaidLbl">Paid</span><strong id="dPaid">SAR 0.00</strong></div>
+        <div class="trow red"><span data-k="lBal">Balance Due</span><strong id="dBal">SAR 0.00</strong></div>
+      </div>
+    </div>
+
+    <div class="panel" id="pPreview">
+      <div class="ph" onclick="togglePanel('pPreview')"><span class="ph-ttl" data-k="lPreview">Invoice Preview</span><span class="ph-arr">▾</span></div>
+      <div class="pb" style="padding:0;overflow:hidden">
+        <div id="invOut"></div>
+        <div style="padding:10px" class="g2">
+          <button class="dk" onclick="exportBackup()" data-k="lExport">⬇ Export Backup (JSON)</button>
+          <button class="blue" onclick="previewScanData()">🔍 QR Data</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="pHist">
+      <div class="ph" onclick="togglePanel('pHist')"><span class="ph-ttl" data-k="lHistory">Invoice History</span><span class="ph-arr">▾</span></div>
+      <div class="pb">
+        <input id="histQ" placeholder="Search..." oninput="renderHistory()" />
+        <div style="height:8px"></div>
+        <div id="histHost"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="pTools">
+      <div class="ph" onclick="togglePanel('pTools')"><span class="ph-ttl" data-k="lTools">Tools</span><span class="ph-arr">▾</span></div>
+      <div class="pb g2">
+        <button class="lt" onclick="document.getElementById('importFile').click()" data-k="lImport">⬆ Import</button>
+        <button class="dk" onclick="newInvoiceNo()" data-k="lNewNo">🔢 New No.</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="printArea" style="display:none"></div>
+  <div class="nav">
+    <button class="nb gold" onclick="addItem()"><span class="ni">＋</span><span data-k="lAddItem">Add</span></button>
+    <button class="nb" onclick="saveInvoice()"><span class="ni">💾</span><span data-k="lSave">Save</span></button>
+    <button class="nb" onclick="confirmNewInvoice()"><span class="ni">🆕</span><span data-k="lNew">New</span></button>
+    <button class="nb blue" onclick="doPrint()"><span class="ni">🖨️</span><span data-k="lPrint">Print</span></button>
+  </div>
+  <div id="toast"></div>
+  <input id="importFile" type="file" accept="application/json" class="hidden" onchange="onImport(this)" />
+
+  <!-- LICENSE GATE -->
+  <div id="licenseGate">
+    <div class="lg-box">
+      <div class="lg-logo">🔐</div>
+      <div class="lg-title">AURA Gold ZATCA Pro</div>
+      <div class="lg-sub" id="lgSub">Enter your access password to continue</div>
+      <input class="lg-input" type="password" id="lgPwd" placeholder="••••••••" maxlength="32" />
+      <div class="lg-err" id="lgErr"></div>
+      <button class="lg-btn" onclick="lgSubmit()">Unlock App</button>
+      <div class="lg-exp" id="lgExpInfo"></div>
+    </div>
+  </div>
+
+  <!-- EXPIRED SCREEN -->
+  <div id="expiredScreen" style="display:none">
+    <div class="exp-box">
+      <div class="exp-icon">⛔</div>
+      <div class="exp-title">License Expired</div>
+      <div class="exp-msg" id="expMsg">Your license for AURA Gold ZATCA Pro has expired.<br><br>Please contact your vendor to renew.</div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var QR_LOADING=false;
+    function loadQRLib(cb){
+      if(typeof QRCode!=="undefined"){cb&&cb();return;}
+      if(QR_LOADING){setTimeout(function(){loadQRLib(cb);},300);return;}
+      QR_LOADING=true;
+      var s=document.createElement("script");
+      s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+      s.onload=function(){QR_LOADING=false;document.getElementById("qrLibStatus").style.display="none";cb&&cb();};
+      s.onerror=function(){QR_LOADING=false;var st=document.getElementById("qrLibStatus");st.style.display="block";st.textContent="⚠️ QR library failed to load. Check internet and reload.";};
+      document.head.appendChild(s);
+    }
+    loadQRLib(function(){if(typeof renderInvoice==="function")renderInvoice();});
+  })();
+  </script>
+
+  <script>
+    const T={
+      en:{
+        appTitle:"AURA Gold Shop",appSub:"Simplified Tax Invoice",
+        shop:"Shop Info",shopName:"Shop Name",vatNo:"VAT No.",phone:"Phone",address:"Address",
+        shopLogo:"Logo",removeLogo:"Remove Logo",lSocial:"Social Media",
+        custInv:"Customer & Invoice",lInvNo:"Invoice No.",lDate:"Date",lCustName:"Customer",lCustPhone:"Phone",
+        lVatRate:"VAT %",lPaid:"Paid (SAR)",lPayType:"Payment",lExp:"Expense (SAR)",lNotes:"Notes",
+        lShowQr:"Show QR on Invoice",lItems:"Gold Items",lAddItem:"Add Item",lDup:"Duplicate",
+        lTotals:"Totals",lSub:"Subtotal",lTax:"Taxable Amount",lVatAmt:"VAT Amount",lGrand:"GRAND TOTAL",
+        lPaidLbl:"Paid",lBal:"Balance Due",lPreview:"Invoice Preview",lHistory:"Invoice History",
+        lTools:"Tools",lImport:"Import",lNewNo:"New No.",lExport:"Export Backup (JSON)",lSave:"Save",
+        lNew:"New",lPrint:"Print",confirmNew:"Start a new invoice?",confirmDel:"Delete this invoice?",
+        saved:"Invoice Saved!",imported:"Imported!",
+        lItemType:"Item Type",lKarat:"Karat",lUnit:"Unit",lQty:"Qty",lWeight:"Weight (g)",lRateG:"Rate/g",
+        lMaking:"Making",lDiscount:"Discount",lApplyVat:"Apply VAT",lTotalWt:"Total Wt",lPreVat:"Pre-VAT",
+        lVatLbl:"VAT",lItemTotal:"Item Total",lCopy:"Copy",lDel:"Delete",lNoSaved:"No saved invoices",lLoad:"Load",
+        Ring:"Ring",Bracelet:"Bracelet",Chain:"Chain",Necklace:"Necklace",Earrings:"Earrings",Pendant:"Pendant",Bullion:"Bullion",Other:"Other",
+        "24K":"24K","22K":"22K","21K":"21K","18K":"18K","14K":"14K",
+        Gram:"Gram",Piece:"Piece",Carat:"Carat",Cash:"Cash",Card:"Card",Transfer:"Bank Transfer",Mixed:"Mixed",Credit:"Credit",
+        iSale:"Simplified Tax Invoice",iInv:"Invoice",iDate:"Date",iPay:"Payment",
+        iCust:"Customer",iPhoneLbl:"Phone",iVatR:"VAT Rate",iVatN:"VAT No.",iItem:"Item",iWt:"Wt (g)",iRate:"Rate",
+        iPreV:"Pre-VAT",iVat:"VAT",iTotal:"Total",iDisc:"Discount",iNet:"Net Amount",iVatOnly:"VAT Amount",
+        iGrandWithVat:"Total Including VAT",iPaid:"Paid",iBal:"Balance Due",iThanks:"Thank you for your business.",iSig:"Authorized Signature"
+      },
+      ar:{
+        appTitle:"متجر الذهب",appSub:"فاتورة ضريبية مبسطة",
+        shop:"معلومات المتجر",shopName:"اسم المتجر",vatNo:"الرقم الضريبي",phone:"الهاتف",address:"العنوان",
+        shopLogo:"الشعار",removeLogo:"حذف الشعار",lSocial:"وسائل التواصل",
+        custInv:"العميل والفاتورة",lInvNo:"رقم الفاتورة",lDate:"التاريخ",lCustName:"العميل",lCustPhone:"الهاتف",
+        lVatRate:"نسبة الضريبة",lPaid:"المدفوع (ريال)",lPayType:"الدفع",lExp:"المصروف (ريال)",lNotes:"ملاحظات",
+        lShowQr:"إظهار QR في الفاتورة",lItems:"أصناف الذهب",lAddItem:"إضافة صنف",lDup:"نسخ",
+        lTotals:"الإجماليات",lSub:"الإجمالي الفرعي",lTax:"القيمة الخاضعة للضريبة",lVatAmt:"قيمة الضريبة",lGrand:"الإجمالي الكلي",
+        lPaidLbl:"المدفوع",lBal:"المتبقي",lPreview:"معاينة الفاتورة",lHistory:"سجل الفواتير",
+        lTools:"الأدوات",lImport:"استيراد",lNewNo:"رقم جديد",lExport:"تصدير نسخة احتياطية (JSON)",lSave:"حفظ",
+        lNew:"جديد",lPrint:"طباعة",confirmNew:"بدء فاتورة جديدة؟",confirmDel:"حذف هذه الفاتورة؟",
+        saved:"تم حفظ الفاتورة!",imported:"تم الاستيراد!",
+        lItemType:"نوع الصنف",lKarat:"العيار",lUnit:"الوحدة",lQty:"الكمية",lWeight:"الوزن (جم)",lRateG:"سعر/جم",
+        lMaking:"المصنعية",lDiscount:"الخصم",lApplyVat:"تطبيق الضريبة",lTotalWt:"إجمالي الوزن",lPreVat:"قبل الضريبة",
+        lVatLbl:"الضريبة",lItemTotal:"إجمالي الصنف",lCopy:"نسخ",lDel:"حذف",lNoSaved:"لا توجد فواتير محفوظة",lLoad:"تحميل",
+        Ring:"خاتم",Bracelet:"سوار",Chain:"سلسلة",Necklace:"عقد",Earrings:"أقراط",Pendant:"تعليقة",Bullion:"سبيكة",Other:"أخرى",
+        "24K":"24 عيار","22K":"22 عيار","21K":"21 عيار","18K":"18 عيار","14K":"14 عيار",
+        Gram:"جرام",Piece:"قطعة",Carat:"قيراط",Cash:"نقداً",Card:"بطاقة",Transfer:"تحويل بنكي",Mixed:"مختلط",Credit:"آجل",
+        iSale:"فاتورة ضريبية مبسطة",iInv:"الفاتورة",iDate:"التاريخ",iPay:"الدفع",
+        iCust:"العميل",iPhoneLbl:"الهاتف",iVatR:"نسبة الضريبة",iVatN:"الرقم الضريبي",iItem:"الصنف",iWt:"الوزن",iRate:"السعر",
+        iPreV:"قبل الضريبة",iVat:"الضريبة",iTotal:"الإجمالي",iDisc:"الخصم",iNet:"الصافي",iVatOnly:"ضريبة القيمة المضافة",
+        iGrandWithVat:"المجموع شامل ضريبة القيمة المضافة",iPaid:"المدفوع",iBal:"المتبقي",iThanks:"شكراً لتعاملكم معنا.",iSig:"توقيع المفوض"
+      }
+    };
+
+    let L="en",TL=T.en,items=[];
+    const TYPES=["Ring","Bracelet","Chain","Necklace","Earrings","Pendant","Bullion","Other"];
+    const KT=["24K","22K","21K","18K","14K","Other"];
+    const UN=["Gram","Piece","Carat"];
+    const $=id=>document.getElementById(id);
+    const t=k=>(T[L]&&T[L][k]!==undefined)?T[L][k]:(T.en[k]??k);
+    const nVal=v=>{const n=parseFloat(v);return Number.isFinite(n)?n:0;};
+    const money=n=>Number(n||0).toLocaleString("en",{minimumFractionDigits:0,maximumFractionDigits:0});
+    const num3=n=>{const v=Number(n||0);if(Number.isInteger(v))return v.toLocaleString("en");const s=v.toFixed(3).replace(/\.?0+$/,"");return parseFloat(s).toLocaleString("en",{minimumFractionDigits:1,maximumFractionDigits:3});};
+    const moneyZatca=n=>Number(n||0).toFixed(2);
+    const enc=txt=>new TextEncoder().encode(String(txt??""));
+
+    function toast(msg){const el=$("toast");el.textContent=msg;el.style.opacity=1;clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity=0,1800);}
+    function saveLS(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+    function getLS(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+    function getInvoices(){try{const x=JSON.parse(getLS("au.inv")||"[]");return Array.isArray(x)?x:[];}catch(e){return[];}}
+    function setInvoices(x){saveLS("au.inv",JSON.stringify(x));}
+    function nextInvoiceNo(){const y=String(new Date().getFullYear()).slice(-2);let c=parseInt(getLS("au.cnt")||"1",10);if(!Number.isFinite(c)||c<1)c=1;return `SINV-${y}-${String(c).padStart(4,"0")}`;}
+    function useInvoiceNo(){const no=nextInvoiceNo();let c=parseInt(getLS("au.cnt")||"1",10);if(!Number.isFinite(c)||c<1)c=1;saveLS("au.cnt",String(c+1));return no;}
+    function nowLocal(){const d=new Date();const p=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;}
+    function newInvoiceNo(){$("invNo").value=useInvoiceNo();$("invDate").value=nowLocal();renderInvoice();}
+    function togglePanel(id){const p=$(id);if(!p)return;p.classList.toggle("closed");saveLS("au.panel."+id,p.classList.contains("closed")?"1":"0");}
+    function restorePanels(){["pShop","pCust","pItems","pTotals","pHist","pTools"].forEach(id=>{if(getLS("au.panel."+id)==="1")$(id).classList.add("closed");});}
+    function safeConfirm(msg){try{return window.confirm(msg);}catch(e){return true;}}
+    function confirmNewInvoice(){if(safeConfirm(TL.confirmNew))newInvoice();}
+
+    // ══ SHOP LOCK — Change password below ══
+    const ADMIN_PASSWORD="aura2024";
+    function isShopLocked(){return getLS("au.shoplock")==="1";}
+    function applyLockState(){
+      const locked=isShopLocked();
+      const banner=$("shopLockBanner"),fields=$("shopFields");
+      if(locked){
+        banner.style.display="flex";fields.classList.add("locked-overlay");
+        fields.querySelectorAll("input,select,textarea,button").forEach(el=>el.setAttribute("disabled","disabled"));
+      }else{
+        banner.style.display="none";fields.classList.remove("locked-overlay");
+        fields.querySelectorAll("input,select,textarea,button").forEach(el=>el.removeAttribute("disabled"));
+      }
+    }
+    function lockShop(){saveLS("au.shoplock","1");applyLockState();toast("🔒 Shop info locked!");}
+    function unlockShop(){
+      const pwd=prompt("Enter admin password:");
+      if(pwd===null)return;
+      if(pwd===ADMIN_PASSWORD){saveLS("au.shoplock","0");applyLockState();toast("🔓 Unlocked!");}
+      else alert("❌ Wrong password.");
+    }
+
+    function mkItem(d={}){return{tp:d.tp||"Ring",kt:d.kt||"22K",un:d.un||"Gram",qty:nVal(d.qty||1),wt:nVal(d.wt||0),rate:nVal(d.rate||0),mkg:nVal(d.mkg||0),disc:nVal(d.disc||0),vat:d.vat!==false};}
+    function itemMath(it,vr){const totalWt=Math.max(0,nVal(it.qty)*nVal(it.wt));const preVat=Math.max(0,totalWt*nVal(it.rate)+nVal(it.mkg)-nVal(it.disc));const vatAmt=it.vat?preVat*vr:0;const total=preVat+vatAmt;return{totalWt,preVat,vatAmt,total};}
+
+    function renderItems(){
+      const host=$("itemsHost");host.innerHTML="";$("itemCnt").textContent=items.length;const vr=nVal($("vatRate").value)/100;
+      items.forEach((it,i)=>{
+        const m=itemMath(it,vr);const el=document.createElement("div");el.className="icard";
+        el.innerHTML=`<div class="ihead"><span class="inum">${t("lItems")} ${i+1}</span><div style="display:flex;gap:6px"><button class="sm lt au" data-cp>${t("lCopy")}</button><button class="sm rd au" data-dl>${t("lDel")}</button></div></div>
+          <div class="g1">
+            <div><span class="lbl">${t("lItemType")}</span><select data-f="tp">${TYPES.map(v=>`<option value="${v}" ${it.tp===v?"selected":""}>${t(v)}</option>`).join("")}</select></div>
+            <div class="g2"><div><span class="lbl">${t("lKarat")}</span><select data-f="kt">${KT.map(v=>`<option value="${v}" ${it.kt===v?"selected":""}>${t(v)}</option>`).join("")}</select></div><div><span class="lbl">${t("lUnit")}</span><select data-f="un">${UN.map(v=>`<option value="${v}" ${it.un===v?"selected":""}>${t(v)}</option>`).join("")}</select></div></div>
+            <div class="g2"><div><span class="lbl">${t("lQty")}</span><input data-f="qty" type="number" min="0" step="0.01" value="${it.qty}" /></div><div><span class="lbl">${t("lWeight")}</span><input data-f="wt" type="number" min="0" step="0.001" value="${it.wt}" /></div></div>
+            <div class="srow n"><span>${t("lTotalWt")}</span><strong>${num3(m.totalWt)} ${L==="ar"?"جم":"g"}</strong></div>
+            <div class="g2"><div><span class="lbl">${t("lRateG")}</span><input data-f="rate" type="number" min="0" step="0.01" value="${it.rate}" /></div><div><span class="lbl">${t("lMaking")}</span><input data-f="mkg" type="number" min="0" step="0.01" value="${it.mkg}" /></div></div>
+            <div class="g2"><div><span class="lbl">${t("lDiscount")}</span><input data-f="disc" type="number" min="0" step="0.01" value="${it.disc}" /></div><div><label class="chk" style="margin-top:18px"><input data-f="vat" type="checkbox" ${it.vat?"checked":""} /><span>${t("lApplyVat")}</span></label></div></div>
+            <div class="srow n"><span>${t("lPreVat")}</span><strong>SAR ${money(m.preVat)}</strong></div>
+            <div class="srow n"><span>${t("lVatLbl")}</span><strong>SAR ${money(m.vatAmt)}</strong></div>
+            <div class="srow t"><span>${t("lItemTotal")}</span><strong>SAR ${money(m.total)}</strong></div>
+          </div>`;
+        host.appendChild(el);
+        el.querySelector("[data-dl]").onclick=()=>{items.splice(i,1);if(!items.length)items=[mkItem()];renderItems();calc();};
+        el.querySelector("[data-cp]").onclick=()=>{items.push(mkItem({...items[i]}));renderItems();calc();};
+        el.querySelectorAll("[data-f]").forEach(inp=>{
+          const f=inp.dataset.f,isNum=["qty","wt","rate","mkg","disc"].includes(f);
+          const update=()=>{items[i][f]=inp.type==="checkbox"?inp.checked:(isNum?nVal(inp.value):inp.value);calc();};
+          inp.addEventListener(inp.tagName==="SELECT"||inp.type==="checkbox"?"change":"input",update);
+          if(isNum)inp.addEventListener("blur",update);
+        });
+      });
+    }
+
+    function addItem(){items.push(mkItem());renderItems();calc();setTimeout(()=>$("pItems").scrollIntoView({behavior:"smooth",block:"end"}),120);}
+    function duplicateLastItem(){if(!items.length)return;items.push(mkItem({...items[items.length-1]}));renderItems();calc();}
+
+    function calc(){
+      const vr=nVal($("vatRate").value)/100;let sub=0,tax=0,vat=0,discTotal=0;
+      items.forEach(it=>{const m=itemMath(it,vr);sub+=m.preVat;discTotal+=nVal(it.disc);if(it.vat)tax+=m.preVat;vat+=m.vatAmt;});
+      const exp=nVal($("expAmt").value),grand=sub+vat+exp,paid=nVal($("paidAmt").value),bal=grand-paid;
+      $("dSub").textContent=`SAR ${money(sub)}`;$("dTax").textContent=`SAR ${money(tax)}`;$("dVat").textContent=`SAR ${money(vat)}`;
+      $("dGrand").textContent=`SAR ${money(grand)}`;$("dPaid").textContent=`SAR ${money(paid)}`;$("dBal").textContent=`SAR ${money(bal)}`;
+      renderInvoice();
+    }
+
+    function socialIcon(name){
+      const c='width="12" height="12" viewBox="0 0 24 24" fill="currentColor"';
+      if(name==='instagram')return `<svg ${c}><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.3a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.3z"/></svg>`;
+      if(name==='tiktok')return `<svg ${c}><path d="M16.5 2h2.7a5.8 5.8 0 0 0 2.8 3.1v2.8a8.5 8.5 0 0 1-3.3-.8v6.4a6.5 6.5 0 1 1-6.5-6.5c.3 0 .6 0 .9.1v2.8a3.7 3.7 0 1 0 2.8 3.6V2z"/></svg>`;
+      if(name==='snapchat')return `<svg ${c}><path d="M12 2c2.7 0 4.8 2.2 4.8 4.9 0 .7-.1 1.4-.4 2 .5.8 1.2 1.4 2.1 1.7.4.1.7.5.7.9s-.3.8-.7.9c-.6.2-1.2.3-1.8.4-.1.5-.2 1 .3 1.4.2.2.3.4.3.7 0 .5-.4 1-.9 1-.9 0-1.7-.3-2.4-.8-.6.3-1.3.5-2 .5s-1.4-.2-2-.5c-.7.5-1.5.8-2.4.8-.5 0-.9-.5-.9-1 0-.3.1-.5.3-.7.5-.4.4-.9.3-1.4-.6-.1-1.2-.2-1.8-.4-.4-.1-.7-.5-.7-.9s.3-.8.7-.9c.9-.3 1.6-.9 2.1-1.7-.3-.6-.4-1.3-.4-2C7.2 4.2 9.3 2 12 2z"/></svg>`;
+      return '';
+    }
+
+    function numberToWordsEn(num){
+      num=Math.round((Number(num)||0)*100)/100;
+      const ones=["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+      const tens=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+      function b1000(n){let s="";if(n>=100){s+=ones[Math.floor(n/100)]+" Hundred ";n%=100;}if(n>=20){s+=tens[Math.floor(n/10)]+" ";n%=10;}if(n>0)s+=ones[n]+" ";return s.trim();}
+      function w2w(n){if(n===0)return"Zero";let p=[];if(n>=1000000){p.push(b1000(Math.floor(n/1000000))+" Million");n%=1000000;}if(n>=1000){p.push(b1000(Math.floor(n/1000))+" Thousand");n%=1000;}if(n>0)p.push(b1000(n));return p.join(" ").trim();}
+      const wh=Math.floor(num),fr=Math.round((num-wh)*100);let o=w2w(wh)+" Saudi Riyals";if(fr>0)o+=" and "+w2w(fr)+" Halalas";return o+" Only";
+    }
+
+    function numberToWordsAr(num){
+      num=Math.round((Number(num)||0)*100)/100;
+      const ones=["","واحد","اثنان","ثلاثة","أربعة","خمسة","ستة","سبعة","ثمانية","تسعة"];
+      const teens=["عشرة","أحد عشر","اثنا عشر","ثلاثة عشر","أربعة عشر","خمسة عشر","ستة عشر","سبعة عشر","ثمانية عشر","تسعة عشر"];
+      const tens=["","","عشرون","ثلاثون","أربعون","خمسون","ستون","سبعون","ثمانون","تسعون"];
+      const hundreds=["","مائة","مائتان","ثلاثمائة","أربعمائة","خمسمائة","ستمائة","سبعمائة","ثمانمائة","تسعمائة"];
+      function b100(n){if(n===0)return"صفر";if(n<10)return ones[n];if(n===10)return"عشرة";if(n>10&&n<20)return teens[n-10];if(n%10===0)return tens[Math.floor(n/10)];return ones[n%10]+" و "+tens[Math.floor(n/10)];}
+      function b1000(n){if(n<100)return b100(n);if(n%100===0)return hundreds[Math.floor(n/100)];return hundreds[Math.floor(n/100)]+" و "+b100(n%100);}
+      function w2w(n){if(n===0)return"صفر";let p=[];if(n>=1000000){const m=Math.floor(n/1000000);if(m===1)p.push("مليون");else if(m===2)p.push("مليونان");else if(m<=10)p.push(b1000(m)+" ملايين");else p.push(b1000(m)+" مليون");n%=1000000;}if(n>=1000){const th=Math.floor(n/1000);if(th===1)p.push("ألف");else if(th===2)p.push("ألفان");else if(th<=10)p.push(b1000(th)+" آلاف");else p.push(b1000(th)+" ألف");n%=1000;}if(n>0)p.push(b1000(n));return p.join(" و ").trim();}
+      const wh=Math.floor(num),fr=Math.round((num-wh)*100);let o=w2w(wh)+" ريال سعودي";if(fr>0)o+=" و "+w2w(fr)+" هللة";return o+" فقط";
+    }
+
+    function getAmountInWords(a){return{en:numberToWordsEn(a),ar:numberToWordsAr(a)};}
+
+    function getData(){
+      const vr=nVal($("vatRate").value)/100,vr100=nVal($("vatRate").value);
+      let sub=0,vat=0,discTotal=0,tax=0;
+      items.forEach(it=>{const m=itemMath(it,vr);sub+=m.preVat;discTotal+=nVal(it.disc);if(it.vat)tax+=m.preVat;vat+=m.vatAmt;});
+      const exp=nVal($("expAmt").value),grand=sub+vat+exp,paid=nVal($("paidAmt").value),bal=grand-paid;
+      const payRaw=$("payType").value;
+      return{
+        shop:$("shopName").value||"AURA Gold Shop",shopChar:($("shopName").value||"A").trim()[0].toUpperCase(),
+        vatNo:$("shopVat").value,phone:$("shopPhone").value,addr:$("shopAddr").value,
+        shopCr:$("shopCr").value,shopMetalLic:$("shopMetalLic").value,shopDisclaimer:$("shopDisclaimer").value,
+        insta:$("shopInsta").value,tiktok:$("shopTiktok").value,snap:$("shopSnap").value,
+        logo:getLS("au.logo")||"",
+        invNo:$("invNo").value,rawDate:$("invDate").value,invDate:$("invDate").value.replace("T"," "),
+        cName:$("custName").value||"—",cPhone:$("custPhone").value,
+        vr,vr100,sub,tax,vat,exp,grand,paid,bal,discTotal,
+        pay:t(payRaw),payRaw,notes:$("notes").value,showQr:$("showQr").checked,
+        items:[...items],isRTL:L==="ar"
+      };
+    }
+
+    function toISOForZATCA(raw){try{if(!raw)return new Date().toISOString();const d=new Date(raw.includes("T")?raw:raw.replace(" ","T"));return isNaN(d.getTime())?new Date().toISOString():d.toISOString();}catch(e){return new Date().toISOString();}}
+    function tlvField(tag,val){const v=enc(val||"");const tg=new Uint8Array([tag]);const l=new Uint8Array([v.length]);return new Uint8Array([...tg,...l,...v]);}
+    function concatBytes(parts){const len=parts.reduce((s,p)=>s+p.length,0);const out=new Uint8Array(len);let off=0;parts.forEach(p=>{out.set(p,off);off+=p.length;});return out;}
+    function bytesToBase64(bytes){let bin="";bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin);}
+    function buildZatcaBase64(d){const ts=toISOForZATCA(d.rawDate);const payload=concatBytes([tlvField(1,d.shop),tlvField(2,d.vatNo),tlvField(3,ts),tlvField(4,moneyZatca(d.grand)),tlvField(5,moneyZatca(d.vat))]);return bytesToBase64(payload);}
+    function buildScanText(d){const lines=[];lines.push(`Seller: ${d.shop}`);lines.push(`VAT No: ${d.vatNo||"—"}`);lines.push(`Invoice No: ${d.invNo}`);lines.push(`Date: ${d.invDate}`);lines.push(`Grand Total: SAR ${moneyZatca(d.grand)}`);lines.push(`VAT: SAR ${moneyZatca(d.vat)}`);return lines.join("\n");}
+
+    function generateQRDataURL(text,size){
+      size=size||220;
+      return new Promise(function(resolve,reject){
+        try{
+          if(typeof QRCode==="undefined")return reject(new Error("QRCode not loaded"));
+          var box=document.createElement("div");
+          box.style.cssText="position:fixed;left:-9999px;top:-9999px;width:"+size+"px;height:"+size+"px;";
+          document.body.appendChild(box);
+          new QRCode(box,{text:String(text||" "),width:size,height:size,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
+          var tries=0;
+          function attempt(){tries++;try{var img=box.querySelector("img"),canvas=box.querySelector("canvas"),dataURL="";if(canvas)dataURL=canvas.toDataURL("image/png");else if(img&&img.src&&img.src.startsWith("data:"))dataURL=img.src;if(dataURL&&dataURL.length>100){box.remove();resolve(dataURL);}else if(tries<15)setTimeout(attempt,100);else{box.remove();reject(new Error("QR timeout"));}}catch(e){box.remove();reject(e);}}
+          setTimeout(attempt,150);
+        }catch(e){reject(e);}
+      });
+    }
+    async function getQRCodeImage(d){return await generateQRDataURL(buildZatcaBase64(d),220);}
+
+    function buildInvHTML(d,qrImgSrc){
+      const rows=d.items.map((it,i)=>{const m=itemMath(it,d.vr);const desc=`${t(it.tp)} ${t(it.kt)}${nVal(it.qty)!==1?" × "+it.qty:""}`;return `<tr><td style="white-space:normal"><span class="ibadge2">${i+1}</span>${desc}</td><td>${num3(m.totalWt)}</td><td>${money(it.rate)}</td><td>${money(m.preVat)}</td><td>${money(m.vatAmt)}</td><td>${money(m.total)}</td></tr>`;}).join("");
+      const qrSlot=d.showQr&&qrImgSrc?`<div class="iqrb"><img src="${qrImgSrc}" alt="QR" width="110" height="110"></div>`:"";
+      const smParts=[];
+      if(d.insta)smParts.push(`<span class="soc"><span class="soc-ico">${socialIcon("instagram")}</span><span>${d.insta}</span></span>`);
+      if(d.tiktok)smParts.push(`<span class="soc"><span class="soc-ico">${socialIcon("tiktok")}</span><span>${d.tiktok}</span></span>`);
+      if(d.snap)smParts.push(`<span class="soc"><span class="soc-ico">${socialIcon("snapchat")}</span><span>${d.snap}</span></span>`);
+      const smRow=smParts.length?`<div class="social-row">${smParts.join("")}</div>`:"";
+      const crLine=[d.shopCr?`CR: ${d.shopCr}`:"",d.shopMetalLic?`رخصة المعادن: ${d.shopMetalLic}`:""].filter(Boolean).join(" | ");
+      const infoBits=[d.phone,d.vatNo?`${t("iVatN")}: ${d.vatNo}`:"",crLine,d.addr].filter(Boolean).join("<br>");
+      const words=getAmountInWords(d.grand);
+      const amountWordsHtml=d.isRTL?words.ar:words.en;
+      const amountWordsLabel=d.isRTL?"المبلغ كتابة":"Amount in Words";
+      const disclaimerHtml=d.shopDisclaimer?`<div class="disclaimer-bar">${d.shopDisclaimer}</div>`:"";
+
+      return `
+        <div class="istrip"></div>
+        <div class="ibody ${d.isRTL?"inv-rtl":""}">
+          <div class="ihdr">
+            <div class="isbl">
+              ${d.logo?`<img src="${d.logo}" class="ilogo" alt="">` :`<div class="ilogoph">${d.shopChar}</div>`}
+              <div><div class="isname">${d.shop}</div><div class="isinfo">${infoBits}</div></div>
+            </div>
+            <div class="itblock">
+              <div class="ibadge">${t("iSale")}</div>
+              <div class="imeta"><strong>${t("iInv")}</strong> ${d.invNo}<br><strong>${t("iDate")}</strong> ${d.invDate}<br><strong>${t("iPay")}</strong> ${d.pay}</div>
+            </div>
+          </div>
+          <div class="idiv"><div class="idivl"></div><span style="color:#c9a84c;font-size:10px">◆</span><div class="idivl"></div></div>
+          <div class="icbar">
+            <div class="icf"><div class="icl">${t("iCust")}</div><div class="icv">${d.cName}</div></div>
+            <div class="icf"><div class="icl">${t("iPhoneLbl")}</div><div class="icv">${d.cPhone||"—"}</div></div>
+            <div class="icf"><div class="icl">${t("iVatR")}</div><div class="icv">${d.vr100}%</div></div>
+          </div>
+          <table class="itable">
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead><tr><th>${t("iItem")}</th><th>${t("iWt")}</th><th>${t("iRate")}</th><th>${t("iPreV")}</th><th>${t("iVat")}</th><th>${t("iTotal")}</th></tr></thead>
+            <tbody>${rows||`<tr><td colspan="6" style="text-align:center;color:#999;padding:10px">—</td></tr>`}</tbody>
+          </table>
+          <div class="ibot">
+            <div class="itots">
+              <table>
+                ${d.discTotal>0?`<tr class="ivt"><td>${t("iDisc")}</td><td>SAR ${money(d.discTotal)}</td></tr>`:""}
+                <tr class="ivt"><td>${t("iNet")}</td><td>SAR ${money(d.sub)}</td></tr>
+                <tr class="ivt"><td>${t("iVatOnly")} (${d.vr100}%)</td><td>SAR ${money(d.vat)}</td></tr>
+                <tr class="igr"><td>${t("iGrandWithVat")}</td><td>SAR ${money(d.grand)}</td></tr>
+                <tr class="ipr"><td>${t("iPaid")}</td><td>SAR ${money(d.paid)}</td></tr>
+                <tr class="ibl"><td>${t("iBal")}</td><td>SAR ${money(d.bal)}</td></tr>
+              </table>
+              <div style="margin-top:4mm;padding:3mm 4mm;border:1px solid #e5d8b0;border-radius:8px;background:#faf6eb;">
+                <div style="font-size:8px;color:#a07830;font-weight:800;margin-bottom:2px;">${amountWordsLabel}</div>
+                <div style="font-size:10px;font-weight:700;color:#1a1201;line-height:1.8;">${amountWordsHtml}</div>
+              </div>
+            </div>
+            ${qrSlot}
+          </div>
+          <div class="iftr">
+            <div class="inotes">${d.notes?`<strong>${t("lNotes")}:</strong> ${d.notes}<br>`:""} ${t("iThanks")}${smRow}</div>
+            <div class="isig"><div class="isigline"></div><div class="isigtxt">${t("iSig")}</div></div>
+          </div>
+          ${disclaimerHtml}
+        </div>
+        <div class="istrip"></div>`;
+    }
+
+    var _rit=null;
+    async function renderInvoice(){
+      clearTimeout(_rit);
+      _rit=setTimeout(async function(){
+        const d=getData();let qrImg="";
+        try{if(d.showQr&&typeof QRCode!=="undefined")qrImg=await getQRCodeImage(d);}catch(e){qrImg="";}
+        $("invOut").innerHTML=buildInvHTML(d,qrImg);updateBrand();
+      },80);
+    }
+
+    function updateBrand(){
+      $("appTitle").textContent=$("shopName").value||t("appTitle");$("appSub").textContent=t("appSub");
+      const logo=getLS("au.logo"),box=$("logoBox");
+      if(logo){box.style.backgroundImage=`url('${logo}')`;box.textContent="";}
+      else{box.style.backgroundImage="none";box.textContent=(($("shopName").value||"A").trim()[0]||"A").toUpperCase();}
+    }
+
+    function saveSettings(){
+      saveLS("au.settings",JSON.stringify({
+        shopName:$("shopName").value,shopVat:$("shopVat").value,shopPhone:$("shopPhone").value,shopAddr:$("shopAddr").value,
+        shopInsta:$("shopInsta").value,shopTiktok:$("shopTiktok").value,shopSnap:$("shopSnap").value,
+        shopCr:$("shopCr").value,shopMetalLic:$("shopMetalLic").value,shopDisclaimer:$("shopDisclaimer").value,lang:L
+      }));
+      updateBrand();
+    }
+
+    function loadSettings(){
+      try{
+        const s=JSON.parse(getLS("au.settings")||"{}");
+        $("shopName").value=s.shopName||"AURA Gold Shop";
+        $("shopVat").value=s.shopVat||"";$("shopPhone").value=s.shopPhone||"";$("shopAddr").value=s.shopAddr||"";
+        $("shopInsta").value=s.shopInsta||"";$("shopTiktok").value=s.shopTiktok||"";$("shopSnap").value=s.shopSnap||"";
+        $("shopCr").value=s.shopCr||"";$("shopMetalLic").value=s.shopMetalLic||"";
+        $("shopDisclaimer").value=s.shopDisclaimer!==undefined?s.shopDisclaimer:"وزن الحجر لا يتجاوز %5 من وزنه والبضاعه المباعه لا ترد ولاتستبدل بعد خروجها من المحل الا بقصد البيع";
+        L=s.lang||"en";$("langSel").value=L;
+      }catch(e){}
+    }
+
+    function setLang(lang){
+      L=lang==="ar"?"ar":"en";TL=T[L];
+      document.documentElement.lang=L;document.documentElement.dir=L==="ar"?"rtl":"ltr";
+      document.querySelectorAll("[data-k]").forEach(el=>{el.textContent=t(el.dataset.k);});
+      $("appTitle").textContent=$("shopName").value||t("appTitle");$("appSub").textContent=t("appSub");
+      $("payType").querySelectorAll("option").forEach(op=>op.textContent=t(op.value));
+      saveSettings();renderItems();calc();renderHistory();
+    }
+
+    function onLogo(input){const file=input.files&&input.files[0];if(!file)return;const fr=new FileReader();fr.onload=e=>{saveLS("au.logo",e.target.result);updateBrand();renderInvoice();};fr.readAsDataURL(file);}
+    function removeLogo(){try{localStorage.removeItem("au.logo");}catch(e){}updateBrand();renderInvoice();}
+
+    function validate(){
+      const err=[];if(!items.length)err.push("No items");if(!$("shopName").value.trim())err.push("Missing seller name");
+      if(!$("shopVat").value.trim())err.push("Missing VAT number");if(!$("invNo").value.trim())err.push("Missing invoice number");
+      $("formErr").style.display=err.length?"block":"none";$("formErr").textContent=err.join(", ");return !err.length;
+    }
+
+    function saveInvoice(){
+      if(!validate())return;
+      try{const arr=getInvoices(),data=getData();data.items=items.map(x=>({...x}));data.savedAt=new Date().toISOString();const idx=arr.findIndex(x=>x.invNo===data.invNo);if(idx>=0)arr[idx]=data;else arr.unshift(data);setInvoices(arr);renderHistory();toast(t("saved"));}
+      catch(e){alert("Save failed: "+e.message);}
+    }
+
+    function loadInvoice(data){
+      $("invNo").value=data.invNo||useInvoiceNo();
+      $("invDate").value=data.rawDate||(data.invDate?data.invDate.replace(" ","T").slice(0,16):nowLocal());
+      $("custName").value=data.cName||"";$("custPhone").value=data.cPhone||"";$("vatRate").value=nVal(data.vr100||15);
+      $("paidAmt").value=nVal(data.paid||0);$("payType").value=["Cash","Card","Transfer","Mixed","Credit"].includes(data.payRaw)?data.payRaw:"Cash";
+      $("expAmt").value=nVal(data.exp||0);$("notes").value=data.notes||"";$("showQr").checked=data.showQr!==false;
+      items=Array.isArray(data.items)&&data.items.length?data.items.map(mkItem):[mkItem()];
+      renderItems();calc();
+    }
+
+    function renderHistory(){
+      const q=($("histQ").value||"").toLowerCase().trim(),host=$("histHost");
+      const arr=getInvoices().filter(x=>{const hay=[x.invNo,x.cName,x.cPhone,x.shop].join(" ").toLowerCase();return !q||hay.includes(q);});
+      if(!arr.length){host.innerHTML=`<div class="hitem" style="text-align:center;color:#7b6b4a">${t("lNoSaved")}</div>`;return;}
+      host.innerHTML=arr.map((x,i)=>`<div class="hitem"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><div style="font-weight:900">${x.invNo||"—"}</div><div style="font-size:12px;color:#7b6b4a">${x.cName||"—"} • ${x.invDate||""}</div><div style="font-size:12px;color:#7b6b4a">SAR ${money(x.grand||0)}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="sm lt au" onclick="loadHistoryIndex(${i})">${t("lLoad")}</button><button class="sm rd au" onclick="deleteHistoryIndex(${i})">${t("lDel")}</button></div></div></div>`).join("");
+    }
+
+    function loadHistoryIndex(i){const arr=getInvoices(),q=($("histQ").value||"").toLowerCase().trim();const filtered=arr.filter(x=>{const hay=[x.invNo,x.cName,x.cPhone,x.shop].join(" ").toLowerCase();return !q||hay.includes(q);});if(filtered[i])loadInvoice(filtered[i]);}
+    function deleteHistoryIndex(i){if(!safeConfirm(t("confirmDel")))return;const arr=getInvoices(),q=($("histQ").value||"").toLowerCase().trim();const filtered=arr.filter(x=>{const hay=[x.invNo,x.cName,x.cPhone,x.shop].join(" ").toLowerCase();return !q||hay.includes(q);});const target=filtered[i];if(!target)return;setInvoices(arr.filter(x=>x.invNo!==target.invNo));renderHistory();}
+
+    function exportBackup(){try{const payload={settings:JSON.parse(getLS("au.settings")||"{}"),logo:getLS("au.logo")||null,counter:getLS("au.cnt")||"1",invoices:getInvoices()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="AURAGoldZATCAProBackup.json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);}catch(e){alert("Export failed: "+e.message);}}
+
+    function onImport(input){const file=input.files&&input.files[0];if(!file)return;const fr=new FileReader();fr.onload=e=>{try{const data=JSON.parse(e.target.result);if(data.settings)saveLS("au.settings",JSON.stringify(data.settings));if(data.logo)saveLS("au.logo",data.logo);if(data.counter)saveLS("au.cnt",String(data.counter));if(Array.isArray(data.invoices))setInvoices(data.invoices);loadSettings();setLang(L);renderHistory();toast(t("imported"));}catch(err){alert("Invalid JSON backup");}input.value="";};fr.readAsText(file);}
+
+    async function previewScanData(){const d=getData();alert("ZATCA QR:\n\n"+buildZatcaBase64(d)+"\n\nData:\n\n"+buildScanText(d));}
+
+    async function doPrint(){
+      if(!validate())return;
+      const d=getData();let qrImg="";
+      try{if(d.showQr&&typeof QRCode!=="undefined")qrImg=await getQRCodeImage(d);}catch(e){qrImg="";}
+      const invHTML=buildInvHTML(d,qrImg);
+      $("invOut").innerHTML=invHTML;
+      const pa=$("printArea");pa.innerHTML=invHTML;pa.style.display="block";
+      setTimeout(function(){try{window.print();}catch(err){}setTimeout(function(){pa.style.display="none";},2000);},600);
+    }
+
+    window.addEventListener("afterprint",function(){try{var pa=$("printArea");if(pa)pa.style.display="none";}catch(e){}});
+    window.addEventListener("focus",function(){try{var pa=$("printArea");if(pa&&pa.style.display==="block")pa.style.display="none";}catch(e){}});
+
+    function newInvoice(){
+      $("invNo").value=useInvoiceNo();$("invDate").value=nowLocal();$("custName").value="";$("custPhone").value="";
+      $("vatRate").value=15;$("paidAmt").value=0;$("payType").value="Cash";$("expAmt").value=0;$("notes").value="";$("showQr").checked=true;
+      items=[mkItem()];renderItems();calc();
+    }
+
+    $("langSel").addEventListener("change",e=>setLang(e.target.value));
+
+    // ══════════════════════════════════════════════════
+    // LICENSE CONFIG — CHANGE THESE TWO VALUES PER CLIENT
+    // ══════════════════════════════════════════════════
+    const LIC_PASSWORD = "gold2024";       // ← Set client password here
+    const LIC_EXPIRY   = "2026-12-31";     // ← Set expiry date here (YYYY-MM-DD)
+    // ══════════════════════════════════════════════════
+
+    // Simple hash: not cryptographic but not reversible by average user
+    function lgHash(str){
+      let h=0;for(let i=0;i<str.length;i++){h=((h<<5)-h)+str.charCodeAt(i);h|=0;}
+      return "lh"+Math.abs(h).toString(36);
+    }
+
+    function lgCheckExpiry(){
+      const today=new Date().toISOString().slice(0,10);
+      return today<=LIC_EXPIRY;
+    }
+
+    function lgDaysLeft(){
+      const today=new Date();today.setHours(0,0,0,0);
+      const exp=new Date(LIC_EXPIRY);exp.setHours(0,0,0,0);
+      return Math.ceil((exp-today)/(1000*60*60*24));
+    }
+
+    function lgSubmit(){
+      const pwd=$("lgPwd").value.trim();
+      if(!pwd){$("lgErr").textContent="Please enter password.";return;}
+      if(pwd!==LIC_PASSWORD){
+        $("lgErr").textContent="❌ Wrong password. Try again.";
+        $("lgPwd").value="";$("lgPwd").focus();return;
+      }
+      // Password correct — save hash
+      saveLS("au.lic.h", lgHash(LIC_PASSWORD));
+      saveLS("au.lic.exp", LIC_EXPIRY);
+      lgUnlock();
+    }
+
+    function lgUnlock(){
+      $("licenseGate").style.display="none";
+      initApp();
+    }
+
+    function lgInit(){
+      // First check expiry
+      if(!lgCheckExpiry()){
+        $("licenseGate").style.display="none";
+        const es=$("expiredScreen");
+        es.style.display="flex";
+        const d=new Date(LIC_EXPIRY).toLocaleDateString("en-SA",{year:"numeric",month:"long",day:"numeric"});
+        $("expMsg").innerHTML=`Your license expired on <strong>${d}</strong>.<br><br>Please contact your vendor to renew.`;
+        return;
+      }
+
+      // Show days left info
+      const days=lgDaysLeft();
+      const expFormatted=new Date(LIC_EXPIRY).toLocaleDateString("en-SA",{year:"numeric",month:"long",day:"numeric"});
+      $("lgExpInfo").textContent=`License valid until: ${expFormatted} (${days} days left)`;
+
+      // Check if already authenticated on this device
+      const savedHash=getLS("au.lic.h");
+      const savedExp=getLS("au.lic.exp");
+      if(savedHash===lgHash(LIC_PASSWORD) && savedExp===LIC_EXPIRY){
+        // Already authenticated on this device — skip gate
+        lgUnlock();
+        return;
+      }
+
+      // Show gate
+      $("licenseGate").style.display="flex";
+      setTimeout(()=>$("lgPwd").focus(),300);
+    }
+
+    // Allow Enter key on password field
+    document.addEventListener("DOMContentLoaded",function(){
+      const pwd=$("lgPwd");
+      if(pwd) pwd.addEventListener("keydown",function(e){if(e.key==="Enter")lgSubmit();});
+    });
+
+    function initApp(){
+      try{
+        loadSettings();restorePanels();
+        if(!getLS("au.cnt"))saveLS("au.cnt","1");
+        $("invNo").value=useInvoiceNo();$("invDate").value=nowLocal();
+        items=[mkItem()];setLang(L);updateBrand();renderItems();calc();renderHistory();applyLockState();
+      }catch(e){console.error("Init failed:",e);alert("App failed to initialize: "+e.message);}
+    }
+
+    // ── START ──
+    lgInit();
+  </script>
+</body>
+</html>
